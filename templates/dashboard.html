@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>The Hangover - Admin Dashboard</title>
+
+    <style>
+        body {
+            background: #0b0b0b;
+            color: white;
+            font-family: Arial, sans-serif;
+            padding: 30px;
+        }
+
+        h1 {
+            color: #ffae32;
+            text-align: center;
+        }
+
+        h2 {
+            color: #ffae32;
+        }
+
+        .top-buttons {
+            margin: 20px 0;
+        }
+
+        button {
+            background: linear-gradient(135deg, #ffb347, #ff7a00);
+            color: #111;
+            border: none;
+            padding: 12px 20px;
+            margin: 5px;
+            border-radius: 25px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        button:hover {
+            transform: translateY(-2px);
+        }
+
+        .food-card {
+            background: #171717;
+            border: 1px solid #333;
+            padding: 20px;
+            margin: 15px 0;
+            border-radius: 15px;
+        }
+
+        .food-name {
+            color: #ffae32;
+            font-size: 22px;
+            font-weight: bold;
+        }
+
+        .details {
+            color: #ccc;
+            margin-top: 8px;
+        }
+
+        .active {
+            color: #3ddc84;
+        }
+
+        .sold {
+            color: #ff5555;
+        }
+
+        hr {
+            border-color: #333;
+        }
+    </style>
+</head>
+
+<body>
+
+    <h1>🍔 THE HANGOVER</h1>
+
+    <h2>⚡ ADMIN DASHBOARD</h2>
+    <h2>⚡ ADMIN DASHBOARD</h2>
+
+<!-- SHOP STATUS - இங்கே paste பண்ணு -->
+<div style="
+    max-width:600px;
+    margin:20px auto;
+    padding:25px;
+    border-radius:20px;
+    background:#171717;
+    border:1px solid #333;
+    text-align:center;
+">
+
+    <h2 style="color:#ffae32;">
+        🏪 SHOP STATUS
+    </h2>
+
+    {% if shop.is_open %}
+
+        <p style="color:#3ddc84;font-size:20px;font-weight:bold;">
+            🟢 SHOP IS OPEN
+        </p>
+
+        <a href="{{ url_for('toggle_shop') }}">
+            <button style="
+                padding:12px 22px;
+                border:none;
+                border-radius:25px;
+                background:#ff5555;
+                color:white;
+                font-weight:bold;
+                cursor:pointer;
+            ">
+                🔴 CLOSE SHOP
+            </button>
+        </a>
+
+    {% else %}
+
+        <p style="color:#ff5555;font-size:20px;font-weight:bold;">
+            🔴 SHOP IS CLOSED
+        </p>
+
+        <a href="{{ url_for('toggle_shop') }}">
+            <button style="
+                padding:12px 22px;
+                border:none;
+                border-radius:25px;
+                background:#3ddc84;
+                color:#111;
+                font-weight:bold;
+                cursor:pointer;
+            ">
+                🟢 OPEN SHOP
+            </button>
+        </a>
+
+    {% endif %}
+
+</div>
+
+<hr>
+
+    <hr>
+
+    <div class="top-buttons">
+
+        <a href="/admin/add-food">
+            <button>🍔 ADD FOOD</button>
+        </a>
+
+        <a href="/admin/offers">
+            <button>🔥 MANAGE OFFERS</button>
+        </a>
+
+    </div>
+
+    <hr>
+
+    <h2>📋 Saved Foods</h2>
+
+    {% if foods %}
+
+        {% for food in foods %}
+
+            <div class="food-card">
+
+                <div class="food-name">
+                    {{ food.name }}
+                </div>
+
+                <div class="details">
+                    Category: {{ food.category }}
+                    <br>
+                    Price: ₹{{ food.price }}
+                </div>
+
+                {% if food.available %}
+
+                    <p class="active">
+                        🟢 Available
+                    </p>
+
+                {% else %}
+
+                    <p class="sold">
+                        🔴 Sold Out
+                    </p>
+
+                {% endif %}
+
+                <a href="/admin/edit-food/{{ food.id }}">
+                    <button>✏️ EDIT</button>
+                </a>
+
+                <a href="/admin/delete-food/{{ food.id }}"
+                   onclick="return confirm('Are you sure you want to delete this food?');">
+                    <button>🗑️ DELETE</button>
+                </a>
+
+            </div>
+
+        {% endfor %}
+
+    {% else %}
+
+        <p>No foods added yet.</p>
+
+    {% endif %}
+
+</body>
+</html>
