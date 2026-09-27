@@ -1,0 +1,3755 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="manifest"
+      href="{{ url_for('static', filename='manifest.json') }}">
+    <title>THE HANGOVER | Premium Halal Kitchen</title>
+
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='style.css') }}">
+
+    <style>
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            background: #0b0b0b;
+            color: white;
+            font-family: Arial, sans-serif;
+        }
+
+        a {
+            text-decoration: none;
+        }
+
+        button {
+            border: none;
+            padding: 13px 22px;
+            margin: 7px;
+            border-radius: 30px;
+            background: linear-gradient(135deg, #ffb347, #ff7a00);
+            color: #111;
+            font-weight: bold;
+            cursor: pointer;
+            transition: 0.25s;
+        }
+
+        button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(255, 140, 0, 0.35);
+        }
+
+        /* =====================================================
+           HERO
+        ===================================================== */
+
+        .hero {
+            min-height: 90vh;
+            padding: 60px 20px;
+
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+
+            text-align: center;
+
+            background:
+                radial-gradient(
+                    circle at top,
+                    #4a2708,
+                    #0b0b0b 60%
+                );
+        }
+
+        .hero h1 {
+            font-size: clamp(42px, 9vw, 75px);
+            letter-spacing: 5px;
+            color: #ffae32;
+            text-shadow: 0 0 30px #ff7a00;
+        }
+
+        .hero-subtitle {
+            margin-top: 12px;
+            color: #ddd;
+            font-size: 17px;
+            letter-spacing: 4px;
+        }
+
+        .status {
+            margin-top: 25px;
+            padding: 10px 22px;
+
+            border: 1px solid #3ddc84;
+            border-radius: 30px;
+
+            color: #3ddc84;
+            background: rgba(61, 220, 132, 0.08);
+        }
+
+        .status.closed {
+            border-color: #ff5555;
+            color: #ff5555;
+            background: rgba(255, 85, 85, 0.08);
+        }
+
+        .hero-buttons {
+            margin-top: 25px;
+        }
+
+        /* =====================================================
+           MENU
+        ===================================================== */
+
+        .menu-section {
+            padding: 70px 18px;
+            background: #111;
+        }
+
+        .section-title {
+            text-align: center;
+            color: #ffae32;
+            font-size: 34px;
+            margin-bottom: 35px;
+        }
+
+        .category-card {
+            max-width: 800px;
+            margin: 18px auto;
+            padding: 22px;
+
+            border-radius: 20px;
+
+            background:
+                linear-gradient(
+                    145deg,
+                    #1d1d1d,
+                    #101010
+                );
+
+            border: 1px solid #2b2b2b;
+
+            box-shadow:
+                0 15px 35px rgba(0, 0, 0, 0.4);
+        }
+
+        .category-title {
+            color: #ffae32;
+            font-size: 22px;
+            cursor: pointer;
+            user-select: none;
+        }
+
+        .category-title span {
+            float: right;
+        }
+
+        .category-list {
+            display: none;
+            margin-top: 20px;
+        }
+
+        .sub-title {
+            color: #ffb347;
+            margin: 22px 0 10px;
+            font-size: 17px;
+        }
+
+        .item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 12px;
+
+            padding: 14px 0;
+
+            border-bottom: 1px solid #292929;
+        }
+
+        .item:last-child {
+            border-bottom: none;
+        }
+
+        .item-name {
+            flex: 1;
+            color: #ddd;
+            line-height: 1.5;
+        }
+
+        .order-btn {
+            padding: 8px 14px;
+            margin: 0;
+            font-size: 12px;
+            white-space: nowrap;
+        }
+
+        .select-btn {
+            background:
+                linear-gradient(
+                    135deg,
+                    #ffcf70,
+                    #ff8a00
+                );
+        }
+
+        .not-available {
+            color: #777;
+        }
+
+        .closed-order {
+            background: #444 !important;
+            color: #aaa !important;
+            cursor: not-allowed !important;
+            opacity: 0.6;
+        }
+
+        .closed-order:hover {
+            transform: none;
+            box-shadow: none;
+        }
+
+        /* =====================================================
+           VARIANT MODAL
+        ===================================================== */
+
+        .variant-overlay {
+            display: none;
+
+            position: fixed;
+            inset: 0;
+
+            z-index: 9999;
+
+            background: rgba(0, 0, 0, 0.84);
+
+            backdrop-filter: blur(7px);
+
+            padding: 20px;
+
+            justify-content: center;
+            align-items: center;
+        }
+
+        .variant-modal {
+            width: 100%;
+            max-width: 500px;
+
+            background:
+                linear-gradient(
+                    145deg,
+                    #242424,
+                    #101010
+                );
+
+            border: 1px solid #444;
+
+            border-radius: 25px;
+
+            padding: 25px;
+
+            box-shadow:
+                0 20px 70px rgba(0, 0, 0, 0.7);
+        }
+
+        .variant-modal h2 {
+            color: #ffae32;
+            text-align: center;
+            margin-bottom: 8px;
+        }
+
+        .variant-modal p {
+            color: #888;
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .variant-option {
+            width: 100%;
+
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+
+            margin: 8px 0;
+
+            padding: 16px 18px;
+
+            border-radius: 15px;
+
+            background: #1a1a1a;
+            color: white;
+
+            border: 1px solid #333;
+        }
+
+        .variant-option:hover {
+            border-color: #ffae32;
+            background: #242424;
+        }
+
+        .variant-option strong {
+            color: #eee;
+        }
+
+        .variant-option span {
+            color: #ffae32;
+            font-weight: bold;
+        }
+
+        .close-variant {
+            width: 100%;
+            margin-top: 15px;
+            background: #333;
+            color: white;
+        }
+
+        /* =====================================================
+           CART
+        ===================================================== */
+
+        .cart-section {
+            padding: 60px 16px;
+
+            background:
+                linear-gradient(
+                    180deg,
+                    #0b0b0b,
+                    #111
+                );
+
+            text-align: center;
+        }
+
+        .cart-button {
+            min-width: 220px;
+            padding: 15px 24px;
+            font-size: 16px;
+        }
+
+        .cart-panel {
+            display: none;
+
+            max-width: 850px;
+
+            margin: 24px auto 0;
+
+            padding: 22px;
+
+            border-radius: 25px;
+
+            background:
+                linear-gradient(
+                    145deg,
+                    #1c1c1c,
+                    #101010
+                );
+
+            border: 1px solid #333;
+
+            box-shadow:
+                0 20px 50px rgba(0, 0, 0, 0.5);
+
+            text-align: left;
+        }
+
+        .cart-header {
+            display: flex;
+
+            justify-content: space-between;
+            align-items: center;
+
+            margin-bottom: 18px;
+            padding-bottom: 15px;
+
+            border-bottom: 1px solid #333;
+        }
+
+        .cart-title {
+            color: #ffae32;
+            font-size: 28px;
+        }
+
+        .cart-count-badge {
+            display: inline-flex;
+
+            align-items: center;
+            justify-content: center;
+
+            min-width: 34px;
+            height: 34px;
+
+            padding: 0 10px;
+
+            border-radius: 50px;
+
+            background: #ff7a00;
+            color: #111;
+
+            font-size: 14px;
+            font-weight: bold;
+        }
+
+        .cart-empty-box {
+            padding: 35px 20px;
+
+            text-align: center;
+
+            border: 1px dashed #444;
+            border-radius: 18px;
+
+            background: #151515;
+        }
+
+        .cart-empty-icon {
+            font-size: 45px;
+            margin-bottom: 10px;
+        }
+
+        .cart-empty-title {
+            color: #ddd;
+            font-size: 20px;
+            font-weight: bold;
+        }
+
+        .cart-empty-text {
+            margin-top: 8px;
+            color: #777;
+            font-size: 14px;
+        }
+
+        .cart-item-card {
+            padding: 17px;
+
+            margin-bottom: 12px;
+
+            border-radius: 18px;
+
+            background:
+                linear-gradient(
+                    145deg,
+                    #202020,
+                    #171717
+                );
+
+            border: 1px solid #303030;
+        }
+
+        .cart-item-main {
+            display: flex;
+
+            align-items: center;
+
+            justify-content: space-between;
+
+            gap: 15px;
+        }
+
+        .cart-item-info {
+            flex: 1;
+        }
+
+        .cart-item-name {
+            color: #f2f2f2;
+
+            font-size: 16px;
+
+            font-weight: bold;
+
+            line-height: 1.5;
+        }
+
+        .cart-item-each {
+            margin-top: 4px;
+            color: #888;
+            font-size: 13px;
+        }
+
+        .cart-item-subtotal {
+            color: #ffae32;
+            font-size: 18px;
+            font-weight: bold;
+            white-space: nowrap;
+        }
+
+        .cart-item-controls {
+            display: flex;
+
+            align-items: center;
+            justify-content: space-between;
+
+            gap: 10px;
+
+            margin-top: 14px;
+            padding-top: 13px;
+
+            border-top: 1px solid #2b2b2b;
+        }
+
+        .quantity-box {
+            display: flex;
+
+            align-items: center;
+
+            gap: 8px;
+
+            background: #121212;
+
+            padding: 5px;
+
+            border-radius: 50px;
+
+            border: 1px solid #333;
+        }
+
+        .quantity-btn {
+            width: 34px;
+            height: 34px;
+
+            padding: 0;
+            margin: 0;
+
+            border-radius: 50%;
+
+            background: #2b2b2b;
+            color: white;
+
+            font-size: 18px;
+        }
+
+        .quantity-number {
+            min-width: 28px;
+
+            text-align: center;
+
+            color: #fff;
+
+            font-size: 15px;
+
+            font-weight: bold;
+        }
+
+        .remove-item-btn {
+            padding: 9px 14px;
+            margin: 0;
+
+            border-radius: 12px;
+
+            background: #2b2020;
+
+            color: #ff7777;
+
+            border: 1px solid #493030;
+
+            font-size: 11px;
+        }
+
+        .cart-summary {
+            margin-top: 20px;
+
+            padding: 20px;
+
+            border-radius: 20px;
+
+            background:
+                linear-gradient(
+                    145deg,
+                    #171717,
+                    #101010
+                );
+
+            border: 1px solid #383838;
+        }
+
+        .summary-row {
+            display: flex;
+
+            justify-content: space-between;
+
+            padding: 8px 0;
+
+            color: #bbb;
+
+            font-size: 15px;
+        }
+
+        .summary-row.total-row {
+            margin-top: 10px;
+
+            padding-top: 15px;
+
+            border-top: 1px solid #3b3b3b;
+
+            color: white;
+
+            font-size: 23px;
+
+            font-weight: bold;
+        }
+
+        .summary-total {
+            color: #ffae32;
+        }
+
+        .cart-actions {
+            display: grid;
+
+            grid-template-columns: 1fr 1fr;
+
+            gap: 10px;
+
+            margin-top: 16px;
+        }
+
+        .clear-cart {
+            width: 100%;
+            margin: 0;
+
+            background: #292929;
+            color: white;
+
+            border: 1px solid #3a3a3a;
+        }
+
+        .checkout-btn {
+            width: 100%;
+            margin: 0;
+
+            background:
+                linear-gradient(
+                    135deg,
+                    #25d366,
+                    #128c7e
+                );
+
+            color: white;
+        }
+
+        /* =====================================================
+           CUSTOMER DETAILS MODAL
+        ===================================================== */
+
+        .customer-overlay {
+            display: none;
+
+            position: fixed;
+            inset: 0;
+
+            z-index: 10000;
+
+            background: rgba(0, 0, 0, 0.88);
+
+            backdrop-filter: blur(7px);
+
+            padding: 18px;
+
+            justify-content: center;
+            align-items: center;
+
+            overflow-y: auto;
+        }
+
+        .customer-modal {
+            width: 100%;
+            max-width: 520px;
+
+            margin: auto;
+
+            padding: 25px;
+
+            border-radius: 24px;
+
+            background:
+                linear-gradient(
+                    145deg,
+                    #242424,
+                    #101010
+                );
+
+            border: 1px solid #444;
+
+            box-shadow:
+                0 20px 70px rgba(0, 0, 0, 0.7);
+        }
+
+        .customer-modal h2 {
+            color: #ffae32;
+            text-align: center;
+            margin-bottom: 8px;
+        }
+
+        .customer-modal-subtitle {
+            color: #888;
+            text-align: center;
+            margin-bottom: 22px;
+            font-size: 14px;
+        }
+
+        .form-group {
+            margin-bottom: 16px;
+        }
+
+        .form-group label {
+            display: block;
+
+            margin-bottom: 7px;
+
+            color: #ddd;
+
+            font-size: 14px;
+
+            font-weight: bold;
+        }
+
+        .form-group input,
+        .form-group textarea {
+            width: 100%;
+
+            padding: 13px 14px;
+
+            border-radius: 12px;
+
+            border: 1px solid #3a3a3a;
+
+            background: #151515;
+
+            color: white;
+
+            outline: none;
+
+            font-family: Arial, sans-serif;
+
+            font-size: 14px;
+        }
+
+        .form-group input:focus,
+        .form-group textarea:focus {
+            border-color: #ffae32;
+
+            box-shadow:
+                0 0 0 2px rgba(
+                    255,
+                    174,
+                    50,
+                    0.10
+                );
+        }
+
+        .form-group textarea {
+            min-height: 90px;
+            resize: vertical;
+        }
+
+        .customer-form-actions {
+            display: grid;
+
+            grid-template-columns: 1fr 1fr;
+
+            gap: 10px;
+
+            margin-top: 8px;
+        }
+
+        .customer-cancel {
+            width: 100%;
+
+            margin: 0;
+
+            background: #303030;
+
+            color: white;
+        }
+
+        .customer-submit {
+            width: 100%;
+
+            margin: 0;
+
+            background:
+                linear-gradient(
+                    135deg,
+                    #25d366,
+                    #128c7e
+                );
+
+            color: white;
+        }
+
+        .required {
+            color: #ff5555;
+        }
+
+        /* =====================================================
+           DATABASE FOODS
+        ===================================================== */
+
+        .database-foods {
+            padding: 70px 18px;
+            background: #0d0d0d;
+        }
+
+        .food-card {
+            max-width: 580px;
+
+            margin: 18px auto;
+
+            padding: 22px;
+
+            border-radius: 18px;
+
+            background: #171717;
+
+            border: 1px solid #2c2c2c;
+        }
+
+        .food-card h3 {
+            color: #ffae32;
+            margin-bottom: 8px;
+        }
+
+        .food-category {
+            color: #aaa;
+        }
+
+        .food-price {
+            color: #ffae32;
+
+            font-size: 20px;
+
+            font-weight: bold;
+
+            margin-top: 10px;
+        }
+
+        .available {
+            color: #3ddc84;
+            margin-top: 8px;
+        }
+
+        .sold {
+            color: #ff5555;
+            margin-top: 8px;
+        }
+
+        /* =====================================================
+           OFFERS
+        ===================================================== */
+
+        .offer-section {
+            padding: 70px 20px;
+
+            text-align: center;
+
+            background:
+                linear-gradient(
+                    145deg,
+                    #301805,
+                    #0b0b0b
+                );
+        }
+
+        .offer-label {
+            color: #ff7a00;
+            font-weight: bold;
+            letter-spacing: 2px;
+        }
+
+        .offer-section h2 {
+            color: #ffae32;
+            font-size: 35px;
+            margin: 12px 0 25px;
+        }
+
+        .offer-card {
+            max-width: 620px;
+
+            margin: 15px auto;
+
+            padding: 20px;
+
+            border-radius: 18px;
+
+            border: 1px solid #5b3512;
+
+            background:
+                rgba(255, 174, 50, 0.06);
+        }
+
+        .offer-text {
+            color: #eee;
+            font-size: 18px;
+        }
+
+        .no-offer {
+            color: #888;
+        }
+
+        /* =====================================================
+           LOCATION
+        ===================================================== */
+
+        .location {
+            padding: 70px 20px;
+            text-align: center;
+        }
+
+        .location h2 {
+            color: #ffae32;
+            margin-bottom: 15px;
+        }
+
+        .location p {
+            color: #aaa;
+            line-height: 1.7;
+        }
+
+        /* =====================================================
+           INSTAGRAM
+        ===================================================== */
+
+        .instagram {
+            padding: 60px 20px;
+            text-align: center;
+            background: #111;
+        }
+
+        .instagram h2 {
+            color: #ffae32;
+            margin-bottom: 12px;
+        }
+
+        .instagram p {
+            color: #aaa;
+        }
+
+        /* =====================================================
+           FOOTER
+        ===================================================== */
+
+        footer {
+            padding: 25px;
+            text-align: center;
+            color: #777;
+            background: #080808;
+        }
+
+        /* =====================================================
+           MOBILE
+        ===================================================== */
+
+        @media (max-width: 600px) {
+
+            .hero {
+                min-height: 80vh;
+            }
+
+            .hero h1 {
+                letter-spacing: 3px;
+            }
+
+            .hero-subtitle {
+                font-size: 13px;
+                letter-spacing: 2px;
+            }
+
+            .hero-buttons button {
+                width: 90%;
+            }
+
+            .category-card {
+                padding: 18px;
+            }
+
+            .item {
+                align-items: flex-start;
+                flex-wrap: wrap;
+            }
+
+            .item-name {
+                min-width: 100%;
+                font-size: 14px;
+            }
+
+            .order-btn {
+                font-size: 10px;
+                padding: 7px 11px;
+            }
+
+            .cart-panel {
+                padding: 15px;
+            }
+
+            .cart-item-main {
+                align-items: flex-start;
+            }
+
+            .cart-item-name {
+                font-size: 14px;
+            }
+
+            .cart-item-subtotal {
+                font-size: 16px;
+            }
+
+            .cart-item-controls {
+                flex-wrap: wrap;
+            }
+
+            .cart-actions,
+            .customer-form-actions {
+                grid-template-columns: 1fr;
+            }
+
+            .summary-row.total-row {
+                font-size: 20px;
+            }
+
+            .customer-modal {
+                padding: 20px;
+            }
+
+        }
+
+    </style>
+</head>
+
+
+<body>
+
+
+<!-- =========================================================
+     HERO
+========================================================= -->
+
+<section class="hero">
+
+    <h1>
+        THE HANGOVER
+    </h1>
+
+    <p class="hero-subtitle">
+        PREMIUM HALAL KITCHEN
+    </p>
+
+
+    {% if shop.is_open %}
+
+        <p class="status">
+            🟢 OPEN NOW
+        </p>
+
+    {% else %}
+
+        <p class="status closed">
+            🔴 CLOSED NOW
+        </p>
+
+    {% endif %}
+
+
+    <div class="hero-buttons">
+
+        <a href="tel:6380526180">
+
+            <button>
+                📞 CALL &amp; ORDER
+            </button>
+
+        </a>
+
+
+        <button
+            type="button"
+            onclick="openGeneralWhatsApp()">
+
+            💬 WHATSAPP ORDER
+
+        </button>
+
+
+        <button
+            type="button"
+            onclick="toggleCart()">
+
+            🛒 CART
+            (<span id="heroCartCount">0</span>)
+
+        </button>
+
+    </div>
+
+</section>
+
+
+<!-- =========================================================
+     MENU
+========================================================= -->
+
+<section class="menu-section">
+
+    <h2 class="section-title">
+        🍗 OUR MENU
+    </h2>
+
+
+    <!-- ================= SHAWARMA ================= -->
+
+    <div class="category-card">
+
+        <h3
+            class="category-title"
+            onclick="toggleMenu('shawarma-list')">
+
+            🌯 SHAWARMA
+
+            <span>▼</span>
+
+        </h3>
+
+
+        <div
+            id="shawarma-list"
+            class="category-list">
+
+
+            <h4 class="sub-title">
+                Regular Shawarma
+            </h4>
+
+
+            <div class="item">
+
+                <span class="item-name">
+                    Regular Shawarma
+                </span>
+
+
+                <button
+                    class="order-btn select-btn"
+                    onclick='openVariantPicker(
+                        "Regular Shawarma",
+                        [
+                            ["Roll", 90],
+                            ["Plate", 140],
+                            ["Spcl Roll", 150],
+                            ["Spcl Plate", 200]
+                        ]
+                    )'>
+
+                    SELECT
+
+                </button>
+
+            </div>
+
+
+            <h4 class="sub-title">
+                Lays Shawarma
+            </h4>
+
+
+            <div class="item">
+
+                <span class="item-name">
+                    Roll — ₹100
+                </span>
+
+
+                <button
+                    class="order-btn"
+                    onclick='addSimpleItem(
+                        "Lays Shawarma Roll",
+                        100
+                    )'>
+
+                    ORDER NOW
+
+                </button>
+
+            </div>
+
+
+            <div class="item">
+
+                <span class="item-name not-available">
+                    Plate — Not Available
+                </span>
+
+            </div>
+
+
+            <div class="item">
+
+                <span class="item-name not-available">
+                    Spcl Roll — Not Available
+                </span>
+
+            </div>
+
+
+            <div class="item">
+
+                <span class="item-name not-available">
+                    Spcl Plate — Not Available
+                </span>
+
+            </div>
+
+
+            <h4 class="sub-title">
+                Peri Peri Shawarma
+            </h4>
+
+
+            <div class="item">
+
+                <span class="item-name">
+                    Peri Peri Shawarma
+                </span>
+
+
+                <button
+                    class="order-btn select-btn"
+                    onclick='openVariantPicker(
+                        "Peri Peri Shawarma",
+                        [
+                            ["Roll", 100],
+                            ["Plate", 150],
+                            ["Spcl Roll", 150],
+                            ["Spcl Plate", 200]
+                        ]
+                    )'>
+
+                    SELECT
+
+                </button>
+
+            </div>
+
+
+            <h4 class="sub-title">
+                Mexican Shawarma
+            </h4>
+
+
+            <div class="item">
+
+                <span class="item-name">
+                    Mexican Shawarma
+                </span>
+
+
+                <button
+                    class="order-btn select-btn"
+                    onclick='openVariantPicker(
+                        "Mexican Shawarma",
+                        [
+                            ["Roll", 100],
+                            ["Plate", 150],
+                            ["Spcl Roll", 150],
+                            ["Spcl Plate", 200]
+                        ]
+                    )'>
+
+                    SELECT
+
+                </button>
+
+            </div>
+
+
+            <h4 class="sub-title">
+                Schezwan Shawarma
+            </h4>
+
+
+            <div class="item">
+
+                <span class="item-name">
+                    Schezwan Shawarma
+                </span>
+
+
+                <button
+                    class="order-btn select-btn"
+                    onclick='openVariantPicker(
+                        "Schezwan Shawarma",
+                        [
+                            ["Roll", 100],
+                            ["Plate", 150],
+                            ["Spcl Roll", 150],
+                            ["Spcl Plate", 200]
+                        ]
+                    )'>
+
+                    SELECT
+
+                </button>
+
+            </div>
+
+
+            <h4 class="sub-title">
+                Pepper / Ghost / Chilli Garlic / Mint / Sweet Chilli
+            </h4>
+
+
+            <div class="item">
+
+                <span class="item-name">
+                    Choose Variety
+                </span>
+
+
+                <button
+                    class="order-btn select-btn"
+                    onclick='openVariantPicker(
+                        "Pepper / Ghost / Chilli Garlic / Mint / Sweet Chilli Shawarma",
+                        [
+                            ["Roll", 100],
+                            ["Plate", 150],
+                            ["Spcl Roll", 150],
+                            ["Spcl Plate", 200]
+                        ]
+                    )'>
+
+                    SELECT
+
+                </button>
+
+            </div>
+
+
+            <h4 class="sub-title">
+                Cheese Shawarma
+            </h4>
+
+
+            <div class="item">
+
+                <span class="item-name">
+                    Cheese Shawarma
+                </span>
+
+
+                <button
+                    class="order-btn select-btn"
+                    onclick='openVariantPicker(
+                        "Cheese Shawarma",
+                        [
+                            ["Roll", 110],
+                            ["Plate", 160],
+                            ["Spcl Roll", 150],
+                            ["Spcl Plate", 200]
+                        ]
+                    )'>
+
+                    SELECT
+
+                </button>
+
+            </div>
+
+
+            <h4 class="sub-title">
+                Tandoori Shawarma
+            </h4>
+
+
+            <div class="item">
+
+                <span class="item-name">
+                    Tandoori Shawarma
+                </span>
+
+
+                <button
+                    class="order-btn select-btn"
+                    onclick='openVariantPicker(
+                        "Tandoori Shawarma",
+                        [
+                            ["Roll", 100],
+                            ["Plate", 160],
+                            ["Spcl Roll", 150],
+                            ["Spcl Plate", 200]
+                        ]
+                    )'>
+
+                    SELECT
+
+                </button>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- ================= CRISPY ================= -->
+
+    <div class="category-card">
+
+        <h3
+            class="category-title"
+            onclick="toggleMenu('crispy-list')">
+
+            🍗 CRISPY BITES
+
+            <span>▼</span>
+
+        </h3>
+
+
+        <div
+            id="crispy-list"
+            class="category-list">
+
+
+            <div class="item">
+
+                <span class="item-name">
+                    Chicken Popcorn
+                </span>
+
+
+                <button
+                    class="order-btn select-btn"
+                    onclick='openVariantPicker(
+                        "Chicken Popcorn",
+                        [
+                            ["Medium", 130],
+                            ["Large", 280]
+                        ]
+                    )'>
+
+                    SELECT
+
+                </button>
+
+            </div>
+
+
+            <div class="item">
+
+                <span class="item-name">
+                    Chicken Mini Wings
+                </span>
+
+
+                <button
+                    class="order-btn select-btn"
+                    onclick='openVariantPicker(
+                        "Chicken Mini Wings",
+                        [
+                            ["5 pcs", 130],
+                            ["15 pcs", 350]
+                        ]
+                    )'>
+
+                    SELECT
+
+                </button>
+
+            </div>
+
+
+            <div class="item">
+
+                <span class="item-name">
+                    Chicken Strips
+                </span>
+
+
+                <button
+                    class="order-btn select-btn"
+                    onclick='openVariantPicker(
+                        "Chicken Strips",
+                        [
+                            ["5 pcs", 150],
+                            ["10 pcs", 250]
+                        ]
+                    )'>
+
+                    SELECT
+
+                </button>
+
+            </div>
+
+
+            <div class="item">
+
+                <span class="item-name">
+                    Chicken Lolipop — 4 pcs ₹110
+                </span>
+
+
+                <button
+                    class="order-btn"
+                    onclick='addSimpleItem(
+                        "Chicken Lolipop 4 pcs",
+                        110
+                    )'>
+
+                    ORDER NOW
+
+                </button>
+
+            </div>
+
+
+            <div class="item">
+
+                <span class="item-name">
+                    Fried Leg
+                </span>
+
+
+                <button
+                    class="order-btn select-btn"
+                    onclick='openVariantPicker(
+                        "Fried Leg",
+                        [
+                            ["1 pc", 100],
+                            ["2 pcs", 150]
+                        ]
+                    )'>
+
+                    SELECT
+
+                </button>
+
+            </div>
+
+
+            <div class="item">
+
+                <span class="item-name">
+                    Extra Spice — +₹10
+                </span>
+
+
+                <button
+                    class="order-btn"
+                    onclick='addSimpleItem(
+                        "Extra Spice",
+                        10
+                    )'>
+
+                    ADD
+
+                </button>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- ================= FRIES ================= -->
+
+    <div class="category-card">
+
+        <h3
+            class="category-title"
+            onclick="toggleMenu('fries-list')">
+
+            🍟 HANG OVER FRIES
+
+            <span>▼</span>
+
+        </h3>
+
+
+        <div
+            id="fries-list"
+            class="category-list">
+
+
+            <div class="item">
+
+                <span class="item-name">
+                    French Fries — ₹80
+                </span>
+
+                <button
+                    class="order-btn"
+                    onclick='addSimpleItem(
+                        "French Fries",
+                        80
+                    )'>
+
+                    ORDER NOW
+
+                </button>
+
+            </div>
+
+
+            <div class="item">
+
+                <span class="item-name">
+                    Peri Peri Fries — ₹100
+                </span>
+
+                <button
+                    class="order-btn"
+                    onclick='addSimpleItem(
+                        "Peri Peri Fries",
+                        100
+                    )'>
+
+                    ORDER NOW
+
+                </button>
+
+            </div>
+
+
+            <div class="item">
+
+                <span class="item-name">
+                    Shawarma Loaded Fries — ₹150
+                </span>
+
+                <button
+                    class="order-btn"
+                    onclick='addSimpleItem(
+                        "Shawarma Loaded Fries",
+                        150
+                    )'>
+
+                    ORDER NOW
+
+                </button>
+
+            </div>
+
+
+            <div class="item">
+
+                <span class="item-name">
+                    Cheese Shawarma Loaded Fries — ₹180
+                </span>
+
+                <button
+                    class="order-btn"
+                    onclick='addSimpleItem(
+                        "Cheese Shawarma Loaded Fries",
+                        180
+                    )'>
+
+                    ORDER NOW
+
+                </button>
+
+            </div>
+
+
+            <div class="item">
+
+                <span class="item-name">
+                    Chicken Loaded Fries — ₹150
+                </span>
+
+                <button
+                    class="order-btn"
+                    onclick='addSimpleItem(
+                        "Chicken Loaded Fries",
+                        150
+                    )'>
+
+                    ORDER NOW
+
+                </button>
+
+            </div>
+
+
+            <div class="item">
+
+                <span class="item-name">
+                    Cheese Chicken Loaded Fries — ₹180
+                </span>
+
+                <button
+                    class="order-btn"
+                    onclick='addSimpleItem(
+                        "Cheese Chicken Loaded Fries",
+                        180
+                    )'>
+
+                    ORDER NOW
+
+                </button>
+
+            </div>
+
+
+            <div class="item">
+
+                <span class="item-name">
+                    Lays Chicken — ₹120
+                </span>
+
+                <button
+                    class="order-btn"
+                    onclick='addSimpleItem(
+                        "Lays Chicken",
+                        120
+                    )'>
+
+                    ORDER NOW
+
+                </button>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- ================= MOJITO ================= -->
+
+    <div class="category-card">
+
+        <h3
+            class="category-title"
+            onclick="toggleMenu('mojito-list')">
+
+            🍹 MOJITO VARIETY
+
+            <span>▼</span>
+
+        </h3>
+
+
+        <div
+            id="mojito-list"
+            class="category-list">
+
+
+            <div class="item">
+                <span class="item-name">
+                    Blue Mojito — ₹70
+                </span>
+
+                <button
+                    class="order-btn"
+                    onclick='addSimpleItem("Blue Mojito", 70)'>
+
+                    ORDER NOW
+
+                </button>
+            </div>
+
+
+            <div class="item">
+                <span class="item-name">
+                    Green Mojito — ₹70
+                </span>
+
+                <button
+                    class="order-btn"
+                    onclick='addSimpleItem("Green Mojito", 70)'>
+
+                    ORDER NOW
+
+                </button>
+            </div>
+
+
+            <div class="item">
+                <span class="item-name">
+                    Vergin Mojito — ₹80
+                </span>
+
+                <button
+                    class="order-btn"
+                    onclick='addSimpleItem("Vergin Mojito", 80)'>
+
+                    ORDER NOW
+
+                </button>
+            </div>
+
+
+            <div class="item">
+                <span class="item-name">
+                    Watermelon Mojito — ₹80
+                </span>
+
+                <button
+                    class="order-btn"
+                    onclick='addSimpleItem("Watermelon Mojito", 80)'>
+
+                    ORDER NOW
+
+                </button>
+            </div>
+
+
+            <div class="item">
+                <span class="item-name">
+                    Pineapple Mojito — ₹80
+                </span>
+
+                <button
+                    class="order-btn"
+                    onclick='addSimpleItem("Pineapple Mojito", 80)'>
+
+                    ORDER NOW
+
+                </button>
+            </div>
+
+
+            <div class="item">
+                <span class="item-name">
+                    Blackcurrant Mojito — ₹80
+                </span>
+
+                <button
+                    class="order-btn"
+                    onclick='addSimpleItem("Blackcurrant Mojito", 80)'>
+
+                    ORDER NOW
+
+                </button>
+            </div>
+
+
+            <div class="item">
+                <span class="item-name">
+                    Strawberry Mojito — ₹80
+                </span>
+
+                <button
+                    class="order-btn"
+                    onclick='addSimpleItem("Strawberry Mojito", 80)'>
+
+                    ORDER NOW
+
+                </button>
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- ================= CHARCOAL ================= -->
+
+    <div class="category-card">
+
+        <h3
+            class="category-title"
+            onclick="toggleMenu('charcoal-list')">
+
+            🍗 CHARCOAL CHICKEN
+
+            <span>▼</span>
+
+        </h3>
+
+
+        <div
+            id="charcoal-list"
+            class="category-list">
+
+
+            <div class="item">
+
+                <span class="item-name">
+                    BBQ
+                </span>
+
+
+                <button
+                    class="order-btn select-btn"
+                    onclick='openVariantPicker(
+                        "BBQ",
+                        [
+                            ["Quarter", 120],
+                            ["Half", 220],
+                            ["Full", 400]
+                        ]
+                    )'>
+
+                    SELECT
+
+                </button>
+
+            </div>
+
+
+            <div class="item">
+
+                <span class="item-name">
+                    Alfham
+                </span>
+
+
+                <button
+                    class="order-btn select-btn"
+                    onclick='openVariantPicker(
+                        "Alfham",
+                        [
+                            ["Quarter", 120],
+                            ["Half", 220],
+                            ["Full", 400]
+                        ]
+                    )'>
+
+                    SELECT
+
+                </button>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- ================= BROWNIE ================= -->
+
+    <div class="category-card">
+
+        <h3
+            class="category-title"
+            onclick="toggleMenu('brownie-list')">
+
+            🍫 BROWNIE
+
+            <span>▼</span>
+
+        </h3>
+
+
+        <div
+            id="brownie-list"
+            class="category-list">
+
+
+            <div class="item">
+
+                <span class="item-name">
+                    Chocolate Brownie — ₹80
+                </span>
+
+                <button
+                    class="order-btn"
+                    onclick='addSimpleItem(
+                        "Chocolate Brownie",
+                        80
+                    )'>
+
+                    ORDER NOW
+
+                </button>
+
+            </div>
+
+
+            <div class="item">
+
+                <span class="item-name">
+                    White Chocolate Brownie — ₹80
+                </span>
+
+                <button
+                    class="order-btn"
+                    onclick='addSimpleItem(
+                        "White Chocolate Brownie",
+                        80
+                    )'>
+
+                    ORDER NOW
+
+                </button>
+
+            </div>
+
+
+            <div class="item">
+
+                <span class="item-name">
+                    Triple Chocolate Brownie — ₹100
+                </span>
+
+                <button
+                    class="order-btn"
+                    onclick='addSimpleItem(
+                        "Triple Chocolate Brownie",
+                        100
+                    )'>
+
+                    ORDER NOW
+
+                </button>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- ================= BUCKET ================= -->
+
+    <div class="category-card">
+
+        <h3
+            class="category-title"
+            onclick="toggleMenu('bucket-list')">
+
+            🪣 BUCKET CHICKEN COMBOS
+
+            <span>▼</span>
+
+        </h3>
+
+
+        <div
+            id="bucket-list"
+            class="category-list">
+
+
+            <div class="item">
+
+                <span class="item-name">
+                    Mini Bucket — 4 pcs + French Fries — ₹350
+                </span>
+
+                <button
+                    class="order-btn"
+                    onclick='addSimpleItem(
+                        "Mini Bucket — 4 pcs + French Fries",
+                        350
+                    )'>
+
+                    ORDER NOW
+
+                </button>
+
+            </div>
+
+
+            <div class="item">
+
+                <span class="item-name">
+                    Large Bucket — 8 pcs + French Fries — ₹600
+                </span>
+
+                <button
+                    class="order-btn"
+                    onclick='addSimpleItem(
+                        "Large Bucket — 8 pcs + French Fries",
+                        600
+                    )'>
+
+                    ORDER NOW
+
+                </button>
+
+            </div>
+
+
+            <div class="item">
+
+                <span class="item-name">
+                    Boneless Bucket — 500gm + Mojito — ₹450
+                </span>
+
+                <button
+                    class="order-btn"
+                    onclick='addSimpleItem(
+                        "Boneless Bucket — 500gm + Mojito",
+                        450
+                    )'>
+
+                    ORDER NOW
+
+                </button>
+
+            </div>
+
+
+            <div class="item">
+
+                <span class="item-name">
+                    Boneless Bucket — 1 Kg + Mojito + Fries — ₹850
+                </span>
+
+                <button
+                    class="order-btn"
+                    onclick='addSimpleItem(
+                        "Boneless Bucket — 1 Kg + Mojito + Fries",
+                        850
+                    )'>
+
+                    ORDER NOW
+
+                </button>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- =========================================================
+     CART
+========================================================= -->
+
+<section class="cart-section">
+
+    <button
+        type="button"
+        class="cart-button"
+        onclick="toggleCart()">
+
+        🛒 VIEW CART
+        (
+        <span id="cartCount">
+            0
+        </span>
+        )
+
+    </button>
+
+
+    <div
+        id="cartPanel"
+        class="cart-panel">
+
+
+        <div class="cart-header">
+
+            <h2 class="cart-title">
+                🛒 YOUR CART
+            </h2>
+
+
+            <span
+                id="cartCountBadge"
+                class="cart-count-badge">
+
+                0
+
+            </span>
+
+        </div>
+
+
+        <div id="cartItems">
+
+            <div class="cart-empty-box">
+
+                <div class="cart-empty-icon">
+                    🛒
+                </div>
+
+                <div class="cart-empty-title">
+                    Your cart is empty
+                </div>
+
+                <div class="cart-empty-text">
+                    Add some delicious items from the menu.
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <div class="cart-summary">
+
+            <div class="summary-row">
+
+                <span>
+                    Items
+                </span>
+
+                <span id="summaryItemCount">
+                    0
+                </span>
+
+            </div>
+
+
+            <div class="summary-row">
+
+                <span>
+                    Quantity
+                </span>
+
+                <span id="summaryQuantity">
+                    0
+                </span>
+
+            </div>
+
+
+            <div class="summary-row total-row">
+
+                <span>
+                    TOTAL
+                </span>
+
+                <span class="summary-total">
+
+                    ₹<span id="cartTotal">
+                        0
+                    </span>
+
+                </span>
+
+            </div>
+
+        </div>
+
+
+        <div class="cart-actions">
+
+            <button
+                type="button"
+                class="clear-cart"
+                onclick="clearCart()">
+
+                🗑️ CLEAR CART
+
+            </button>
+
+
+            <button
+                type="button"
+                class="checkout-btn"
+                onclick="openCustomerForm()">
+
+                💬 PLACE ORDER
+
+            </button>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- =========================================================
+     DATABASE FOODS
+========================================================= -->
+
+<section class="database-foods">
+
+    <h2 class="section-title">
+        🍔 LATEST MENU
+    </h2>
+
+
+    {% if foods %}
+
+        {% for food in foods %}
+
+            <div class="food-card">
+
+                <h3>
+                    {{ food.name }}
+                </h3>
+
+
+                <p class="food-category">
+                    {{ food.category }}
+                </p>
+
+
+                <div class="food-price">
+
+                    ₹{{ food.price|round(0)|int }}
+
+                </div>
+
+
+                {% if food.available %}
+
+                    <p class="available">
+                        🟢 Available
+                    </p>
+
+
+                    <button
+                        class="order-btn"
+                        style="margin-top:12px;"
+                        onclick='addSimpleItem(
+                            {{ food.name|tojson }},
+                            {{ food.price|float }}
+                        )'>
+
+                        ORDER NOW
+
+                    </button>
+
+
+                {% else %}
+
+                    <p class="sold">
+                        🔴 Sold Out
+                    </p>
+
+                {% endif %}
+
+            </div>
+
+        {% endfor %}
+
+
+    {% else %}
+
+        <p
+            style="
+                text-align:center;
+                color:#888;
+            ">
+
+            No foods available.
+
+        </p>
+
+    {% endif %}
+
+</section>
+
+
+<!-- =========================================================
+     OFFERS
+========================================================= -->
+
+<section class="offer-section">
+
+    <span class="offer-label">
+        🔥 TODAY'S OFFERS
+    </span>
+
+
+    <h2>
+        Special Offers
+    </h2>
+
+
+    {% if offers %}
+
+        {% for offer in offers %}
+
+            <div class="offer-card">
+
+                <p class="offer-text">
+                    {{ offer.text }}
+                </p>
+
+            </div>
+
+        {% endfor %}
+
+
+    {% else %}
+
+        <p class="no-offer">
+            No special offers today.
+        </p>
+
+    {% endif %}
+
+</section>
+
+
+<!-- =========================================================
+     LOCATION
+========================================================= -->
+
+<section class="location">
+
+    <h2>
+        📍 FIND US
+    </h2>
+
+
+    <p>
+
+        Kadalaiyur Road,<br>
+        D. Lingam Medical Opposite,<br>
+        Kovilpatti
+
+    </p>
+
+
+    <a
+        href="https://www.google.com/maps/search/?api=1&query=The+Hangover+Kovilpatti"
+        target="_blank">
+
+        <button>
+
+            📍 OPEN IN GOOGLE MAPS
+
+        </button>
+
+    </a>
+
+</section>
+
+
+<!-- =========================================================
+     INSTAGRAM
+========================================================= -->
+
+<section class="instagram">
+
+    <h2>
+        📸 FOLLOW US
+    </h2>
+
+
+    <p>
+        @THE_HANGOVER_KVP
+    </p>
+
+
+    <a
+        href="https://www.instagram.com/THE_HANGOVER_KVP/"
+        target="_blank">
+
+        <button>
+
+            📸 INSTAGRAM
+
+        </button>
+
+    </a>
+
+</section>
+
+
+<!-- =========================================================
+     FOOTER
+========================================================= -->
+
+<footer>
+
+    © 2026 THE HANGOVER
+
+    <br>
+
+    Premium Halal Kitchen
+
+</footer>
+
+
+<!-- =========================================================
+     VARIANT MODAL
+========================================================= -->
+
+<div
+    id="variantOverlay"
+    class="variant-overlay">
+
+
+    <div class="variant-modal">
+
+        <h2 id="variantTitle">
+            Choose Variant
+        </h2>
+
+
+        <p>
+            Select your exact option
+        </p>
+
+
+        <div id="variantOptions">
+        </div>
+
+
+        <button
+            type="button"
+            class="close-variant"
+            onclick="closeVariantPicker()">
+
+            ✖ CLOSE
+
+        </button>
+
+    </div>
+
+</div>
+
+
+<!-- =========================================================
+     CUSTOMER DETAILS MODAL
+========================================================= -->
+
+<div
+    id="customerOverlay"
+    class="customer-overlay">
+
+
+    <div class="customer-modal">
+
+        <h2>
+            📝 ORDER DETAILS
+        </h2>
+
+
+        <p class="customer-modal-subtitle">
+            Enter your details before sending the order
+        </p>
+
+
+        <form
+            id="customerForm"
+            onsubmit="submitCustomerOrder(event)">
+
+
+            <!-- NAME -->
+
+            <div class="form-group">
+
+                <label>
+                    Customer Name
+                    <span class="required">*</span>
+                </label>
+
+
+                <input
+                    type="text"
+                    id="customerName"
+                    placeholder="Enter your name"
+                    required
+                    maxlength="60">
+
+            </div>
+
+
+            <!-- PHONE -->
+
+            <div class="form-group">
+
+                <label>
+                    Phone Number
+                    <span class="required">*</span>
+                </label>
+
+
+                <input
+                    type="tel"
+                    id="customerPhone"
+                    placeholder="10 digit mobile number"
+                    required
+                    maxlength="10"
+                    inputmode="numeric">
+
+            </div>
+
+
+            <!-- PICKUP TIME -->
+
+            <div class="form-group">
+
+                <label>
+                    Pickup Time
+                </label>
+
+
+                <input
+                    type="time"
+                    id="pickupTime">
+
+            </div>
+
+
+            <!-- NOTES -->
+
+            <div class="form-group">
+
+                <label>
+                    Notes / Special Request
+                </label>
+
+
+                <textarea
+                    id="orderNotes"
+                    placeholder="Example: Extra spicy, no onion..."
+                    maxlength="300"></textarea>
+
+            </div>
+
+
+            <!-- BUTTONS -->
+
+            <div class="customer-form-actions">
+
+                <button
+                    type="button"
+                    class="customer-cancel"
+                    onclick="closeCustomerForm()">
+
+                    ✖ CANCEL
+
+                </button>
+
+
+                <button
+                    type="submit"
+                    class="customer-submit">
+
+                    📲 SEND ORDER
+
+                </button>
+
+            </div>
+
+        </form>
+
+    </div>
+
+</div>
+
+
+<!-- =========================================================
+     JAVASCRIPT
+========================================================= -->
+
+<script>
+
+    /* =====================================================
+       SHOP STATUS
+    ===================================================== */
+
+    const shopIsOpen =
+        {{ shop.is_open|tojson }};
+
+
+    /* =====================================================
+       CART
+    ===================================================== */
+
+    let cart = [];
+
+
+    /* =====================================================
+       MENU TOGGLE
+    ===================================================== */
+
+    function toggleMenu(id) {
+
+        const list =
+            document.getElementById(id);
+
+
+        if (!list) {
+            return;
+        }
+
+
+        if (
+            list.style.display === "block"
+        ) {
+
+            list.style.display =
+                "none";
+
+        } else {
+
+            list.style.display =
+                "block";
+
+        }
+
+    }
+
+
+    /* =====================================================
+       ADD SIMPLE ITEM
+    ===================================================== */
+
+    function addSimpleItem(
+        itemName,
+        price
+    ) {
+
+        if (!shopIsOpen) {
+
+            alert(
+                "🔴 Sorry! The Hangover is currently closed."
+            );
+
+            return;
+
+        }
+
+
+        addToCart(
+            itemName,
+            Number(price)
+        );
+
+    }
+
+
+    /* =====================================================
+       ADD TO CART
+    ===================================================== */
+
+    function addToCart(
+        itemName,
+        price
+    ) {
+
+        const existingItem =
+            cart.find(
+                function(item) {
+
+                    return (
+                        item.name === itemName &&
+                        item.price === price
+                    );
+
+                }
+            );
+
+
+        if (existingItem) {
+
+            existingItem.quantity += 1;
+
+        } else {
+
+            cart.push({
+
+                name: itemName,
+
+                price: Number(price),
+
+                quantity: 1
+
+            });
+
+        }
+
+
+        renderCart();
+
+
+        const panel =
+            document.getElementById(
+                "cartPanel"
+            );
+
+
+        if (panel) {
+
+            panel.style.display =
+                "block";
+
+        }
+
+    }
+
+
+    /* =====================================================
+       VARIANT PICKER
+    ===================================================== */
+
+    function openVariantPicker(
+        itemName,
+        variants
+    ) {
+
+        if (!shopIsOpen) {
+
+            alert(
+                "🔴 Sorry! The Hangover is currently closed."
+            );
+
+            return;
+
+        }
+
+
+        const overlay =
+            document.getElementById(
+                "variantOverlay"
+            );
+
+
+        const title =
+            document.getElementById(
+                "variantTitle"
+            );
+
+
+        const options =
+            document.getElementById(
+                "variantOptions"
+            );
+
+
+        title.textContent =
+            itemName;
+
+
+        options.innerHTML =
+            "";
+
+
+        variants.forEach(
+            function(variant) {
+
+                const variantName =
+                    variant[0];
+
+
+                const price =
+                    Number(variant[1]);
+
+
+                const option =
+                    document.createElement(
+                        "button"
+                    );
+
+
+                option.type =
+                    "button";
+
+
+                option.className =
+                    "variant-option";
+
+
+                option.innerHTML =
+                    `
+                        <strong>
+                            ${variantName}
+                        </strong>
+
+                        <span>
+                            ₹${price}
+                        </span>
+                    `;
+
+
+                option.addEventListener(
+                    "click",
+                    function() {
+
+                        addToCart(
+
+                            itemName +
+                            " — " +
+                            variantName,
+
+                            price
+
+                        );
+
+
+                        closeVariantPicker();
+
+                    }
+                );
+
+
+                options.appendChild(
+                    option
+                );
+
+            }
+        );
+
+
+        overlay.style.display =
+            "flex";
+
+    }
+
+
+    /* =====================================================
+       CLOSE VARIANT
+    ===================================================== */
+
+    function closeVariantPicker() {
+
+        const overlay =
+            document.getElementById(
+                "variantOverlay"
+            );
+
+
+        if (!overlay) {
+            return;
+        }
+
+
+        overlay.style.display =
+            "none";
+
+    }
+
+
+    /* =====================================================
+       RENDER CART
+    ===================================================== */
+
+    function renderCart() {
+
+        const cartItems =
+            document.getElementById(
+                "cartItems"
+            );
+
+
+        const cartCount =
+            document.getElementById(
+                "cartCount"
+            );
+
+
+        const cartCountBadge =
+            document.getElementById(
+                "cartCountBadge"
+            );
+
+
+        const heroCartCount =
+            document.getElementById(
+                "heroCartCount"
+            );
+
+
+        const cartTotal =
+            document.getElementById(
+                "cartTotal"
+            );
+
+
+        const summaryItemCount =
+            document.getElementById(
+                "summaryItemCount"
+            );
+
+
+        const summaryQuantity =
+            document.getElementById(
+                "summaryQuantity"
+            );
+
+
+        if (
+            !cartItems ||
+            !cartCount ||
+            !cartTotal
+        ) {
+
+            return;
+
+        }
+
+
+        let totalQuantity = 0;
+
+        let totalAmount = 0;
+
+
+        cart.forEach(
+            function(item) {
+
+                totalQuantity +=
+                    item.quantity;
+
+
+                totalAmount +=
+                    item.price *
+                    item.quantity;
+
+            }
+        );
+
+
+        /* EMPTY */
+
+        if (cart.length === 0) {
+
+            cartItems.innerHTML =
+                `
+                <div class="cart-empty-box">
+
+                    <div class="cart-empty-icon">
+                        🛒
+                    </div>
+
+                    <div class="cart-empty-title">
+                        Your cart is empty
+                    </div>
+
+                    <div class="cart-empty-text">
+                        Add some delicious items from the menu.
+                    </div>
+
+                </div>
+                `;
+
+        }
+
+
+        /* ITEMS */
+
+        else {
+
+            let html = "";
+
+
+            cart.forEach(
+                function(item, index) {
+
+                    const subtotal =
+                        item.price *
+                        item.quantity;
+
+
+                    html +=
+                        `
+                        <div class="cart-item-card">
+
+                            <div class="cart-item-main">
+
+                                <div class="cart-item-info">
+
+                                    <div class="cart-item-name">
+
+                                        ${item.name}
+
+                                    </div>
+
+
+                                    <div class="cart-item-each">
+
+                                        ₹${item.price}
+                                        each
+
+                                    </div>
+
+                                </div>
+
+
+                                <div class="cart-item-subtotal">
+
+                                    ₹${subtotal}
+
+                                </div>
+
+                            </div>
+
+
+                            <div class="cart-item-controls">
+
+                                <div class="quantity-box">
+
+                                    <button
+                                        type="button"
+                                        class="quantity-btn"
+                                        onclick="changeQuantity(
+                                            ${index},
+                                            -1
+                                        )">
+
+                                        −
+
+                                    </button>
+
+
+                                    <span class="quantity-number">
+
+                                        ${item.quantity}
+
+                                    </span>
+
+
+                                    <button
+                                        type="button"
+                                        class="quantity-btn"
+                                        onclick="changeQuantity(
+                                            ${index},
+                                            1
+                                        )">
+
+                                        +
+
+                                    </button>
+
+                                </div>
+
+
+                                <button
+                                    type="button"
+                                    class="remove-item-btn"
+                                    onclick="removeFromCart(
+                                        ${index}
+                                    )">
+
+                                    🗑️ REMOVE
+
+                                </button>
+
+                            </div>
+
+                        </div>
+                        `;
+
+                }
+            );
+
+
+            cartItems.innerHTML =
+                html;
+
+        }
+
+
+        cartCount.textContent =
+            totalQuantity;
+
+
+        if (cartCountBadge) {
+
+            cartCountBadge.textContent =
+                totalQuantity;
+
+        }
+
+
+        if (heroCartCount) {
+
+            heroCartCount.textContent =
+                totalQuantity;
+
+        }
+
+
+        cartTotal.textContent =
+            totalAmount;
+
+
+        if (summaryItemCount) {
+
+            summaryItemCount.textContent =
+                cart.length;
+
+        }
+
+
+        if (summaryQuantity) {
+
+            summaryQuantity.textContent =
+                totalQuantity;
+
+        }
+
+    }
+
+
+    /* =====================================================
+       QUANTITY
+    ===================================================== */
+
+    function changeQuantity(
+        index,
+        change
+    ) {
+
+        if (!cart[index]) {
+            return;
+        }
+
+
+        cart[index].quantity +=
+            change;
+
+
+        if (
+            cart[index].quantity <= 0
+        ) {
+
+            cart.splice(
+                index,
+                1
+            );
+
+        }
+
+
+        renderCart();
+
+    }
+
+
+    /* =====================================================
+       REMOVE
+    ===================================================== */
+
+    function removeFromCart(index) {
+
+        if (!cart[index]) {
+            return;
+        }
+
+
+        cart.splice(
+            index,
+            1
+        );
+
+
+        renderCart();
+
+    }
+
+
+    /* =====================================================
+       CLEAR CART
+    ===================================================== */
+
+    function clearCart() {
+
+        if (cart.length === 0) {
+
+            return;
+
+        }
+
+
+        const confirmClear =
+            confirm(
+                "Are you sure you want to clear the cart?"
+            );
+
+
+        if (!confirmClear) {
+
+            return;
+
+        }
+
+
+        cart = [];
+
+
+        renderCart();
+
+    }
+
+
+    /* =====================================================
+       TOGGLE CART
+    ===================================================== */
+
+    function toggleCart() {
+
+        const panel =
+            document.getElementById(
+                "cartPanel"
+            );
+
+
+        if (!panel) {
+            return;
+        }
+
+
+        if (
+            panel.style.display === "block"
+        ) {
+
+            panel.style.display =
+                "none";
+
+        } else {
+
+            panel.style.display =
+                "block";
+
+
+            setTimeout(
+                function() {
+
+                    panel.scrollIntoView({
+                        behavior: "smooth",
+                        block: "start"
+                    });
+
+                },
+                50
+            );
+
+        }
+
+    }
+
+
+    /* =====================================================
+       OPEN CUSTOMER FORM
+    ===================================================== */
+
+    function openCustomerForm() {
+
+        if (!shopIsOpen) {
+
+            alert(
+                "🔴 Sorry! The Hangover is currently closed."
+            );
+
+            return;
+
+        }
+
+
+        if (cart.length === 0) {
+
+            alert(
+                "🛒 Your cart is empty."
+            );
+
+            return;
+
+        }
+
+
+        const overlay =
+            document.getElementById(
+                "customerOverlay"
+            );
+
+
+        if (!overlay) {
+            return;
+        }
+
+
+        overlay.style.display =
+            "flex";
+
+
+        setTimeout(
+            function() {
+
+                document
+                    .getElementById(
+                        "customerName"
+                    )
+                    .focus();
+
+            },
+            100
+        );
+
+    }
+
+
+    /* =====================================================
+       CLOSE CUSTOMER FORM
+    ===================================================== */
+
+    function closeCustomerForm() {
+
+        const overlay =
+            document.getElementById(
+                "customerOverlay"
+            );
+
+
+        if (!overlay) {
+            return;
+        }
+
+
+        overlay.style.display =
+            "none";
+
+    }
+
+
+    /* =====================================================
+       SUBMIT CUSTOMER ORDER
+    ===================================================== */
+
+    function submitCustomerOrder(event) {
+
+        event.preventDefault();
+
+
+        if (!shopIsOpen) {
+
+            alert(
+                "🔴 Sorry! The Hangover is currently closed."
+            );
+
+            return;
+
+        }
+
+
+        if (cart.length === 0) {
+
+            alert(
+                "🛒 Your cart is empty."
+            );
+
+            closeCustomerForm();
+
+            return;
+
+        }
+
+
+        const customerName =
+            document
+                .getElementById(
+                    "customerName"
+                )
+                .value
+                .trim();
+
+
+        const customerPhone =
+            document
+                .getElementById(
+                    "customerPhone"
+                )
+                .value
+                .trim();
+
+
+        const pickupTime =
+            document
+                .getElementById(
+                    "pickupTime"
+                )
+                .value;
+
+
+        const orderNotes =
+            document
+                .getElementById(
+                    "orderNotes"
+                )
+                .value
+                .trim();
+
+
+        /* PHONE CHECK */
+
+        const phonePattern =
+            /^[0-9]{10}$/;
+
+
+        if (
+            !phonePattern.test(
+                customerPhone
+            )
+        ) {
+
+            alert(
+                "📱 Please enter a valid 10 digit phone number."
+            );
+
+            return;
+
+        }
+
+
+        let totalAmount = 0;
+
+
+        let totalQuantity = 0;
+
+
+        let message =
+            "Hello The Hangover, I want to place an order.\n\n";
+
+
+        message +=
+            "👤 Customer: " +
+            customerName +
+            "\n";
+
+
+        message +=
+            "📱 Phone: " +
+            customerPhone +
+            "\n";
+
+
+        if (pickupTime) {
+
+            message +=
+                "🕐 Pickup Time: " +
+                pickupTime +
+                "\n";
+
+        }
+
+
+        if (orderNotes) {
+
+            message +=
+                "📝 Notes: " +
+                orderNotes +
+                "\n";
+
+        }
+
+
+        message +=
+            "\n🍗 ORDER ITEMS\n";
+
+
+        message +=
+            "--------------------\n";
+
+
+        cart.forEach(
+            function(item, index) {
+
+                const subtotal =
+                    item.price *
+                    item.quantity;
+
+
+                totalAmount +=
+                    subtotal;
+
+
+                totalQuantity +=
+                    item.quantity;
+
+
+                message +=
+                    (
+                        index + 1
+                    ) +
+                    ". " +
+                    item.name +
+                    " × " +
+                    item.quantity +
+                    " = ₹" +
+                    subtotal +
+                    "\n";
+
+            }
+        );
+
+
+        message +=
+            "\n--------------------\n";
+
+
+        message +=
+            "🔢 Total Quantity: " +
+            totalQuantity +
+            "\n";
+
+
+        message +=
+            "💰 TOTAL: ₹" +
+            totalAmount +
+            "\n";
+
+
+        message +=
+            "\nThank you!";
+
+
+        const phoneNumber =
+            "916380526180";
+
+
+        const whatsappURL =
+            "https://wa.me/" +
+            phoneNumber +
+            "?text=" +
+            encodeURIComponent(
+                message
+            );
+
+
+        closeCustomerForm();
+
+
+        window.open(
+            whatsappURL,
+            "_blank"
+        );
+
+    }
+
+
+    /* =====================================================
+       GENERAL WHATSAPP
+    ===================================================== */
+
+    function openGeneralWhatsApp() {
+
+        if (!shopIsOpen) {
+
+            alert(
+                "🔴 Sorry! The Hangover is currently closed."
+            );
+
+            return;
+
+        }
+
+
+        const phoneNumber =
+            "916380526180";
+
+
+        const message =
+            "Hello The Hangover, I want to place an order.";
+
+
+        const whatsappURL =
+            "https://wa.me/" +
+            phoneNumber +
+            "?text=" +
+            encodeURIComponent(
+                message
+            );
+
+
+        window.open(
+            whatsappURL,
+            "_blank"
+        );
+
+    }
+
+
+    /* =====================================================
+       CLOSE MODALS WHEN CLICKING OUTSIDE
+    ===================================================== */
+
+    document.addEventListener(
+        "click",
+        function(event) {
+
+            const variantOverlay =
+                document.getElementById(
+                    "variantOverlay"
+                );
+
+
+            const customerOverlay =
+                document.getElementById(
+                    "customerOverlay"
+                );
+
+
+            if (
+                event.target ===
+                variantOverlay
+            ) {
+
+                closeVariantPicker();
+
+            }
+
+
+            if (
+                event.target ===
+                customerOverlay
+            ) {
+
+                closeCustomerForm();
+
+            }
+
+        }
+    );
+
+
+    /* =====================================================
+       PAGE LOAD
+    ===================================================== */
+
+    document.addEventListener(
+        "DOMContentLoaded",
+        function() {
+
+            renderCart();
+
+
+            if (!shopIsOpen) {
+
+                const orderButtons =
+                    document.querySelectorAll(
+                        ".order-btn"
+                    );
+
+
+                orderButtons.forEach(
+                    function(button) {
+
+                        button.disabled =
+                            true;
+
+
+                        button.classList.add(
+                            "closed-order"
+                        );
+
+
+                        button.textContent =
+                            "SHOP CLOSED";
+
+                    }
+                );
+
+            }
+
+        }
+    );
+
+</script>
+<script>
+    if ("serviceWorker" in navigator) {
+        window.addEventListener("load", function () {
+            navigator.serviceWorker
+                .register("/service-worker.js")
+                .then(function () {
+                    console.log("THE HANGOVER PWA ready ✅");
+                })
+                .catch(function (error) {
+                    console.log("PWA registration failed:", error);
+                });
+        });
+    }
+</script>
+</body>
+</html>
