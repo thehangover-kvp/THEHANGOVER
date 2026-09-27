@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Add Food - The Hangover</title>
+</head>
+
+<body>
+
+    <h1>🍔 Add New Food</h1>
+
+    <form method="POST">
+
+        <label>Food Name</label>
+        <br>
+        <input type="text" name="name" placeholder="Enter food name" required>
+
+        <br><br>
+
+        <label>Category</label>
+        <br>
+        <input type="text" name="category" placeholder="Example: Shawarma" required>
+
+        <br><br>
+
+        <label>Price</label>
+        <br>
+        <input type="number" name="price" placeholder="Enter price" required>
+
+        <br><br>
+
+        <label>Availability</label>
+        <br>
+        <select name="available">
+            <option value="1">Available</option>
+            <option value="0">Sold Out</option>
+        </select>
+
+        <br><br>
+
+        <button type="submit">ADD FOOD</button>
+
+    </form>
+
+</body>
+</html>
