@@ -1,0 +1,318 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>The Hangover - Manage Offers</title>
+
+    <style>
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            padding: 30px 20px;
+            background: #0b0b0b;
+            color: white;
+            font-family: Arial, sans-serif;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: auto;
+        }
+
+        h1 {
+            color: #ffae32;
+            text-align: center;
+            margin-bottom: 10px;
+        }
+
+        .subtitle {
+            text-align: center;
+            color: #999;
+            margin-bottom: 30px;
+        }
+
+        .card {
+            background: #171717;
+            border: 1px solid #333;
+            border-radius: 18px;
+            padding: 25px;
+            margin-bottom: 25px;
+        }
+
+        h2 {
+            color: #ffae32;
+            margin-top: 0;
+        }
+
+        textarea {
+            width: 100%;
+            min-height: 100px;
+            resize: vertical;
+            padding: 15px;
+            border-radius: 12px;
+            border: 1px solid #444;
+            background: #0f0f0f;
+            color: white;
+            font-size: 16px;
+            outline: none;
+        }
+
+        textarea:focus {
+            border-color: #ffae32;
+        }
+
+        button {
+            border: none;
+            padding: 11px 18px;
+            margin-top: 12px;
+            border-radius: 25px;
+            background: linear-gradient(135deg, #ffb347, #ff7a00);
+            color: #111;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        button:hover {
+            transform: translateY(-2px);
+        }
+
+        .offer-card {
+            background: #111;
+            border: 1px solid #333;
+            border-radius: 15px;
+            padding: 20px;
+            margin-top: 15px;
+        }
+
+        .offer-text {
+            color: #eee;
+            font-size: 18px;
+            line-height: 1.5;
+            margin-bottom: 15px;
+        }
+
+        .active {
+            color: #3ddc84;
+            font-weight: bold;
+        }
+
+        .inactive {
+            color: #ff5555;
+            font-weight: bold;
+        }
+
+        .action-buttons {
+            margin-top: 10px;
+        }
+
+        .action-buttons a {
+            text-decoration: none;
+        }
+
+        .edit-btn {
+            background: #ffae32;
+        }
+
+        .delete-btn {
+            background: #ff5555;
+            color: white;
+        }
+
+        .toggle-on {
+            background: #ff5555;
+            color: white;
+        }
+
+        .toggle-off {
+            background: #3ddc84;
+            color: #111;
+        }
+
+        .back-btn {
+            display: inline-block;
+            margin-top: 10px;
+            padding: 11px 18px;
+            border-radius: 25px;
+            background: #222;
+            color: #fff;
+            text-decoration: none;
+            border: 1px solid #444;
+        }
+
+        .empty {
+            text-align: center;
+            color: #777;
+            padding: 20px;
+        }
+
+        @media (max-width: 600px) {
+
+            body {
+                padding: 20px 12px;
+            }
+
+            .card {
+                padding: 18px;
+            }
+
+            .offer-text {
+                font-size: 16px;
+            }
+
+            button {
+                width: 100%;
+                margin-right: 0;
+            }
+
+            .action-buttons a {
+                display: block;
+            }
+
+        }
+
+    </style>
+
+</head>
+
+<body>
+
+<div class="container">
+
+    <h1>🔥 THE HANGOVER</h1>
+
+    <p class="subtitle">
+        Manage Daily Offers
+    </p>
+
+
+    <!-- ADD OFFER -->
+
+    <div class="card">
+
+        <h2>➕ ADD NEW OFFER</h2>
+
+        <form action="/admin/add-offer" method="POST">
+
+            <textarea
+                name="text"
+                placeholder="Example: Weekend Special 🔥 Chicken Shawarma ₹99"
+                required></textarea>
+
+            <br>
+
+            <button type="submit">
+                🔥 POST OFFER
+            </button>
+
+        </form>
+
+    </div>
+
+
+    <!-- SAVED OFFERS -->
+
+    <div class="card">
+
+        <h2>📋 SAVED OFFERS</h2>
+
+        {% if offers %}
+
+            {% for offer in offers %}
+
+                <div class="offer-card">
+
+                    <div class="offer-text">
+                        {{ offer.text }}
+                    </div>
+
+
+                    {% if offer.active %}
+
+                        <div class="active">
+                            🟢 ACTIVE
+                        </div>
+
+                    {% else %}
+
+                        <div class="inactive">
+                            🔴 INACTIVE
+                        </div>
+
+                    {% endif %}
+
+
+                    <div class="action-buttons">
+
+                        <!-- EDIT -->
+
+                        <a href="/admin/edit-offer/{{ offer.id }}">
+                            <button class="edit-btn">
+                                ✏️ EDIT
+                            </button>
+                        </a>
+
+
+                        <!-- TOGGLE -->
+
+                        {% if offer.active %}
+
+                            <a href="/admin/toggle-offer/{{ offer.id }}">
+                                <button class="toggle-on">
+                                    🔴 MAKE INACTIVE
+                                </button>
+                            </a>
+
+                        {% else %}
+
+                            <a href="/admin/toggle-offer/{{ offer.id }}">
+                                <button class="toggle-off">
+                                    🟢 MAKE ACTIVE
+                                </button>
+                            </a>
+
+                        {% endif %}
+
+
+                        <!-- DELETE -->
+
+                        <a href="/admin/delete-offer/{{ offer.id }}"
+                           onclick="return confirm('Delete this offer?');">
+
+                            <button class="delete-btn">
+                                🗑️ DELETE
+                            </button>
+
+                        </a>
+
+                    </div>
+
+                </div>
+
+            {% endfor %}
+
+        {% else %}
+
+            <div class="empty">
+                No offers added yet.
+            </div>
+
+        {% endif %}
+
+
+        <a href="/admin" class="back-btn">
+            ← BACK TO DASHBOARD
+        </a>
+
+    </div>
+
+</div>
+
+</body>
+</html>
